@@ -2,12 +2,15 @@ from base_classes import Name, Phone, Birthday, Email, Address
 
 
 class Record:
+    instances = []
+
     def __init__(self, name):
         self.name = Name(name)
         self.address = None
         self.__phone = None
         self.__birthday = None
         self.__email = None
+        self.__class__.instances.append(self)
 
     def __str__(self):
         email_str = str(self.__email) if self.__email else "---"
