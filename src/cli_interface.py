@@ -182,6 +182,7 @@ def on_get_note():
 
 
 def main():
+    # get data from json logic
     print("Welcome to the assistant bot!")
     while True:
         command = input("Enter a command: ").lower()
