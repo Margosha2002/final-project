@@ -1,9 +1,10 @@
-from base_classes import Name, Phone, Birthday, Email
+from base_classes import Name, Phone, Birthday, Email, Address
 
 
 class Record:
     def __init__(self, name):
         self.name = Name(name)
+        self.address = None
         self.__phone = None
         self.__birthday = None
         self.__email = None
@@ -45,3 +46,7 @@ class Record:
         email_value = Email(value)
         if email_value.value:
             self.__email = email_value
+
+    def add_address(self, city, street, house, flat=None):
+        address = Address(city, street, house, flat)
+        self.address = address

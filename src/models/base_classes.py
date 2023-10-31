@@ -65,3 +65,15 @@ class Email(Field):
             raise EmailValidationError("Please provide valid email address")
 
         super().__init__(email)
+
+
+class Address:
+    def __init__(self, city, street, house, flat=None):
+        self.__city = city
+        self.__street = street
+        self.__house = house
+        self.__flat = flat
+
+    def __str__(self):
+        flat_str = f", ap.{self.__flat}" if self.__flat else ""
+        return f"{self.__city}, {self.__street} street, {self.__house} {flat_str}"
