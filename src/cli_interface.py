@@ -7,8 +7,8 @@ from models.exceptions import (
     BirthdayValidationError,
     EmailValidationError,
 )
-from models.address_book import AddressBook
 from models.notes_book import NotesBook
+from models.address_book import AddressBook
 
 
 def input_error(func):
@@ -50,7 +50,7 @@ def on_greetings():
 
 
 @input_error
-def on_add_contact():
+def on_add_contact(contacts: AddressBook):
     print("Fill all contact info, if you want to leave it blank, just press enter")
     name = input("Enter contact name (required): ")
     if not name:
@@ -72,14 +72,15 @@ def on_add_contact():
         address_details["street"] = input("Enter street: ")
         address_details["house"] = input("Enter house: ")
 
-    # save into address book logic
+    contacts.add_contact(name, address_details, phone, birthday, email)
+    print("Contact added")
 
 
 @input_error
-def on_change_contact():
+def on_change_contact(contacts: AddressBook):
     contact_name = input("Enter a name of the contact, you need to change: ")
 
-    # find and show contact logic
+    contacts.get_contact(contact_name)
 
     field = input(
         "Enter a field, that you need to change (name, phone, email, birthday, address): "
@@ -95,131 +96,100 @@ def on_change_contact():
         address_details["street"] = input("Enter street: ")
         address_details["house"] = input("Enter house: ")
 
-        # save into address book logic
+        contacts.change_contact(contact_name, field, address_details)
     else:
         value = input("Enter field value: ")
-        # save into address book logic
+        contacts.change_contact(contact_name, field, value)
+
+    print("Contact changed")
 
 
-def on_show_all_contacts():
-    # show contacts logic
-    pass
+def on_show_all_contacts(contacts: AddressBook):
+    contacts.show_all()
 
 
-def check_is_match(value, search_pattern):
-    string_lower = str(value).lower()
-    return string_lower.find(search_pattern.lower()) != -1
-
-
-# TODO delete (just example of structure)
-book = [
-    {
-        "name": "Anton",
-        "email": "agdhdj@djj.com",
-        "phone": "8364527842",
-    },
-    {
-        "name": "Alex",
-        "email": "alex234@djj.com",
-        "phone": "6329013456",
-    },
-]
-
-
-# TODO pass an instance of AddressBook class to the function instead of mock
-def on_find_contacts():
+def on_find_contacts(contacts: AddressBook):
     search_pattern = input("Enter search pattern: ")
-    if search_pattern.strip():
-        matches = []
-        for record in book:
-            if (
-                check_is_match(record.name, search_pattern)
-                or check_is_match(record.email, search_pattern)
-                or check_is_match(record.phone, search_pattern)
-            ):
-                matches.append(str(record))
-
-        if len(matches):
-            matches_string = "\n".join(matches)
-            print(f"{'*'*15}\n{matches_string}\n{'*'*15}")
-        else:
-            print("No matches found")
+    contacts.find_contacts(search_pattern)
 
 
-def on_get_contact():
+def on_get_contact(contacts: AddressBook):
     name = input("Enter a contact name: ")
-    # find and show contact logic
+    contacts.get_contact(name)
 
 
-def on_delete_contact():
+def on_delete_contact(contacts: AddressBook):
     name = input("Enter a name of the contact you want to delete: ")
-    # find and show contact logic
+    contacts.get_contact(name)
     is_sure = (
         input(f'Are you sure to delete the contact "{name}"? (Y/N): ').lower() == "y"
     )
     if is_sure:
-        # delete contact logic
-        pass
+        contacts.delete_contact(name)
+        print("Contact deleted")
     else:
         print("Deletion cancelled!")
 
 
 @input_error
-def on_show_birthdays():
+def on_show_birthdays(contacts: AddressBook):
     days = input("Enter days count: ")
     if not days.isdigit():
         raise InvalidDaysCount()
     else:
-        # show birthdays for next X days
+        contacts.show_birthdays(int(days))
         pass
 
 
 @input_error
-def on_add_note():
+def on_add_note(notes: NotesBook):
     name = input("Enter a name of the note (required): ")
     if not name:
         raise NameIsRequiredException()
     body = input("Enter body: ")
     tags = input('Enter tags in "tag1, tag2, tag3" format: ').split(", ")
-    # save note logic
+    notes.add_note(name, body, tags)
+    print("Note added")
 
 
 @input_error
-def on_change_note():
+def on_change_note(notes: NotesBook):
     note_name = input("Enter name of the note you need to change: ")
-    # find and show note logic
+    notes.get_note(note_name)
     field = input("Enter a field, that you need to change (name, body, tags): ").lower()
 
     if not field in ["name", "body", "tags"]:
         raise InvalidChangeField()
 
-    # change note logic
+    value = input("Enter field value: ")
+
+    notes.change_note(note_name, field, value)
+    print("Note changed")
 
 
-def on_delete_note():
+def on_delete_note(notes: NotesBook):
     name = input("Enter a name of the note you want to delete: ")
-    # find and show note logic
+    notes.get_note(name)
     is_sure = input(f'Are you sure to delete the note "{name}"? (Y/N): ').lower() == "y"
     if is_sure:
-        # delete note logic
-        pass
+        notes.delete_note(name)
+        print("Note deleted")
     else:
         print("Deletion cancelled!")
 
 
-def on_show_notes():
-    # show notes logic
-    pass
+def on_show_notes(notes: NotesBook):
+    notes.show_notes()
 
 
-def on_find_notes():
-    search_pattern = input("Enter search pattern: ")
-    # search note logic
+def on_find_notes(notes: NotesBook):
+    search_pattern = input("Enter search pattern: ").lower()
+    notes.find_notes(search_pattern)
 
 
-def on_get_note():
+def on_get_note(notes: NotesBook):
     name = input("Enter a note name: ")
-    # find and show note logic
+    notes.get_note(name)
 
 
 def show_command_list():
@@ -264,30 +234,30 @@ def cli_interface():
         elif command == "help":
             show_command_list()
         elif command == "add-contact":
-            on_add_contact()
+            on_add_contact(contacts)
         elif command == "change-contact":
-            on_change_contact()
+            on_change_contact(contacts)
         elif command == "show-contacts":
-            on_show_all_contacts()
+            on_show_all_contacts(contacts)
         elif command == "find-contacts":
-            on_find_contacts()
+            on_find_contacts(contacts)
         elif command == "get-contact":
-            on_get_contact()
+            on_get_contact(contacts)
         elif command == "delete-contact":
-            on_delete_contact()
+            on_delete_contact(contacts)
         elif command == "show-birthdays":
-            on_show_birthdays()
+            on_show_birthdays(contacts)
         elif command == "add-note":
-            on_add_note()
+            on_add_note(notes)
         elif command == "change-note":
-            on_change_note()
+            on_change_note(notes)
         elif command == "delete-note":
-            on_delete_note()
+            on_delete_note(notes)
         elif command == "show-notes":
-            on_show_notes()
+            on_show_notes(notes)
         elif command == "find-notes":
-            on_find_notes()
+            on_find_notes(notes)
         elif command == "get-note":
-            on_get_note()
+            on_get_note(notes)
         else:
             print("Invalid command. Type 'help' to get the whole command list")
