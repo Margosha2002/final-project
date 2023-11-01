@@ -7,6 +7,8 @@ from models.exceptions import (
     BirthdayValidationError,
     EmailValidationError,
 )
+from models.address_book import AddressBook
+from models.notes_book import NotesBook
 
 
 def input_error(func):
@@ -37,8 +39,9 @@ def input_error(func):
     return inner
 
 
-def on_exit():
-    # save to json logic
+def on_exit(contacts: AddressBook, notes: NotesBook):
+    contacts.save()
+    notes.save()
     print("Good bye!")
 
 
@@ -245,7 +248,8 @@ def show_command_list():
 
 
 def cli_interface():
-    # get data from json logic
+    contacts = AddressBook()
+    notes = NotesBook()
     print("Welcome to the assistant bot!")
     show_command_list()
 
@@ -253,7 +257,7 @@ def cli_interface():
         command = input("Enter a command: ").lower()
 
         if command in ["close", "exit"]:
-            on_exit()
+            on_exit(contacts, notes)
             break
         elif command == "hello":
             on_greetings()

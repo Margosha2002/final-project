@@ -1,9 +1,42 @@
 from note import Note
 from exceptions import NoteNotFoundError
+import json
+import os
 
 
 class NotesBook:
     notes: list[Note] = []
+
+    filename = os.path.abspath("../temp/notes.json")
+
+    def __init__(self) -> None:
+        self.__read()
+
+    def __to_json(self):
+        data = []
+        for item in self.notes:
+            data.append(
+                {
+                    "name": item.name,
+                    "body": item.body,
+                    "tags": item.tags,
+                }
+            )
+        return json.dumps(data)
+
+    def __from_json(self, dump):
+        self.data = [Note(**item) for item in json.loads(dump)]
+
+    def __read(self):
+        try:
+            with open(self.filename, "r") as file:
+                self.__from_json(file.read())
+        except:
+            pass
+
+    def save(self):
+        with open(self.filename, "w") as file:
+            file.write(self.__to_json())
 
     def add_note(self, name: str, body: str | None, tags: list[str]):
         self.notes.append(Note(name, body, tags))
