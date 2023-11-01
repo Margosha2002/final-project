@@ -17,10 +17,10 @@ class AddressBook:
 
         if field == "address":
             record.add_address(
+                value.get("country"),
                 value.get("city"),
                 value.get("street"),
                 value.get("house"),
-                value.get("flat"),
             )
         elif field == "name":
             record.name = value

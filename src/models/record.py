@@ -6,10 +6,10 @@ class Record:
         self.__name = Name(name)
         if address:
             self.address = Address(
+                address.get("country"),
                 address.get("city"),
                 address.get("street"),
                 address.get("house"),
-                address.get("flat"),
             )
         else:
             self.address = None

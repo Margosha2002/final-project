@@ -61,10 +61,10 @@ def on_add_contact():
     address_details = {"country": "", "city": "", "street": "", "house": ""}
 
     if need_fill_address:
+        address_details["country"] = input("Enter country: ")
         address_details["city"] = input("Enter city: ")
         address_details["street"] = input("Enter street: ")
         address_details["house"] = input("Enter house: ")
-        address_details["flat"] = input("enter flat: ")
 
     # save into address book logic
 
@@ -84,10 +84,10 @@ def on_change_contact():
 
     if field == "address":
         address_details = {"country": "", "city": "", "street": "", "house": ""}
+        address_details["country"] = input("Enter country: ")
         address_details["city"] = input("Enter city: ")
         address_details["street"] = input("Enter street: ")
         address_details["house"] = input("Enter house: ")
-        address_details["flat"] = input("enter flat: ")
 
         # save into address book logic
     else:

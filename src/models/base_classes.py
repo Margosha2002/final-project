@@ -68,12 +68,19 @@ class Email(Field):
 
 
 class Address:
-    def __init__(self, city, street, house, flat=None):
+    def __init__(
+        country,
+        self,
+        city,
+        street,
+        house,
+    ):
+        self.__country = country
         self.__city = city
         self.__street = street
         self.__house = house
-        self.__flat = flat
 
     def __str__(self):
-        flat_str = f", ap.{self.__flat}" if self.__flat else ""
-        return f"{self.__city}, {self.__street} street, {self.__house} {flat_str}"
+        return (
+            f"{ self.__country}, {self.__city}, {self.__street} street, {self.__house}"
+        )
