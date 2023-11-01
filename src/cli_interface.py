@@ -25,7 +25,7 @@ def input_error(func):
         except NameIsRequiredException:
             print("Name is required")
         except PhoneIsRequiredException:
-            print("Name is required")
+            print("Phone is required")
         except InvalidChangeField:
             print("Field name is invalid")
         except Exception:
@@ -100,9 +100,44 @@ def on_show_all_contacts():
     pass
 
 
+def check_is_match(value, search_pattern):
+    string_lower = str(value).lower()
+    return string_lower.find(search_pattern.lower()) != -1
+
+
+# TODO delete (just example of structure)
+book = [
+    {
+        "name": "Anton",
+        "email": "agdhdj@djj.com",
+        "phone": "8364527842",
+    },
+    {
+        "name": "Alex",
+        "email": "alex234@djj.com",
+        "phone": "6329013456",
+    },
+]
+
+
+# TODO pass an instance of AddressBook class to the function instead of mock
 def on_find_contacts():
     search_pattern = input("Enter search pattern: ")
-    # search contact logic
+    if search_pattern.strip():
+        matches = []
+        for record in book:
+            if (
+                check_is_match(record.name, search_pattern)
+                or check_is_match(record.email, search_pattern)
+                or check_is_match(record.phone, search_pattern)
+            ):
+                matches.append(str(record))
+
+        if len(matches):
+            matches_string = "\n".join(matches)
+            print(f"{'*'*15}\n{matches_string}\n{'*'*15}")
+        else:
+            print("No matches found")
 
 
 def on_get_contact():
