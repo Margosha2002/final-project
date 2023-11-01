@@ -43,7 +43,7 @@ class AddressBook:
             if item.name.value == name:
                 return item
 
-        raise ContactNotFoundError
+        raise ContactNotFoundError()
 
     def get_contact(self, name):
         print(str(self.__get_contact(name)))
