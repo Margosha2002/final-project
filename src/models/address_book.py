@@ -1,4 +1,5 @@
 from record import Record
+from src.helpers.check_is_match import check_is_match
 
 
 class ContactNotFoundError(Exception):
@@ -36,7 +37,13 @@ class AddressBook:
             print(str(item))
 
     def find_contacts(self, search):
-        pass
+        for record in self.data:
+            if (
+                check_is_match(record.name.value, search)
+                or check_is_match(record.email.value, search)
+                or check_is_match(record.phone.value, search)
+            ):
+                print(str(record))
 
     def __get_contact(self, name):
         for item in self.data:
@@ -52,5 +59,6 @@ class AddressBook:
         self.data = list(filter(lambda item: item.name != name, self.data))
 
     def show_birthdays(self, days):
-        # show birthdays logic
-        pass
+        for item in self.data:
+            if item.check_birthday(days):
+                print(str(item))

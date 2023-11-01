@@ -1,4 +1,5 @@
 from base_classes import Name, Phone, Birthday, Email, Address
+from datetime import datetime, timedelta
 
 
 class Record:
@@ -69,3 +70,11 @@ class Record:
     def add_address(self, city, street, house, flat=None):
         address = Address(city, street, house, flat)
         self.address = address
+
+    def check_birthday(self, days):
+        today = datetime.now()
+        date_to_check = today + timedelta(days=days)
+        return (
+            self.birthday.value.date() > today.date()
+            and self.birthday.value.date() < date_to_check.date()
+        )
