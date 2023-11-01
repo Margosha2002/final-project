@@ -181,9 +181,36 @@ def on_get_note():
     # find and show note logic
 
 
+def show_command_list():
+    print(
+        """
+    *************************************************************************
+    hello               -->  to greet an assistant
+    help                -->  to get the list of possible commands
+    add-contact         -->  to add a contact with further instractions
+    change-contact      -->  to change the contact with further instractions
+    show-contacts       -->  to display the whole contact list
+    find-contacts       -->  to display contacts by provided symbols
+    get-contact         -->  to display contact's data
+    delete-contact      -->  to delete provided contact
+    show-birthdays      -->  to display contacts' bithdays
+    add-note            -->  to add a note
+    change-note         -->  to change a note
+    delete-note         -->  to delete a note
+    show-notes          -->  to display notes list
+    find-notes          -->  to display notes by provided symbols
+    get-note            -->  to display a note
+    exit | close        -->  to exit and store contacts
+    *************************************************************************
+    """
+    )
+
+
 def cli_interface():
     # get data from json logic
     print("Welcome to the assistant bot!")
+    show_command_list()
+
     while True:
         command = input("Enter a command: ").lower()
 
@@ -192,6 +219,8 @@ def cli_interface():
             break
         elif command == "hello":
             on_greetings()
+        elif command == "help":
+            show_command_list()
         elif command == "add-contact":
             on_add_contact()
         elif command == "change-contact":
@@ -219,4 +248,4 @@ def cli_interface():
         elif command == "get-note":
             on_get_note()
         else:
-            print("Invalid command.")
+            print("Invalid command. Type 'help' to get the whole command list")
