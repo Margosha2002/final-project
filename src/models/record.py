@@ -2,17 +2,36 @@ from base_classes import Name, Phone, Birthday, Email, Address
 
 
 class Record:
-    def __init__(self, name):
-        self.name = Name(name)
-        self.address = None
-        self.__phone = None
-        self.__birthday = None
-        self.__email = None
+    def __init__(self, name, address, phone, birthday, email):
+        self.__name = Name(name)
+        if address:
+            self.address = Address(
+                address.get("country"),
+                address.get("city"),
+                address.get("street"),
+                address.get("house"),
+            )
+        else:
+            self.address = None
+        self.__phone = Phone(phone) or None
+        self.__birthday = Birthday(birthday) or None
+        self.__email = Email(email) or None
 
     def __str__(self):
         email_str = str(self.__email) if self.__email else "---"
         phone_str = str(self.__phone) if self.__phone else "---"
-        return f"Name: {self.name.value:<12}, phone: {phone_str:<12}, email: {email_str:<12}".format()
+        birthday_str = str(self.__birthday) if self.__birthday else "---"
+        return f"Name: {str(self.__name)<12}, phone: {phone_str:<12}, email: {email_str:<12}, birthday: {birthday_str:<12}".format()
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, value):
+        name_value = Name(value)
+        if name_value.value:
+            self.__name = name_value
 
     @property
     def phone(self):
