@@ -25,7 +25,7 @@ def input_error(func):
         except NameIsRequiredException:
             print("Name is required")
         except PhoneIsRequiredException:
-            print("Name is required")
+            print("Phone is required")
         except InvalidChangeField:
             print("Field name is invalid")
         except Exception:
@@ -181,6 +181,48 @@ def on_get_note():
     # find and show note logic
 
 
+# TODO delete (just example of structure)
+book = {
+    "Anton": {
+        "name": "Anton",
+        "email": "agdhdj@djj.com",
+        "phone": "8364527842",
+    },
+    "Alex": {
+        "name": "Alex",
+        "email": "alex234@djj.com",
+        "phone": "6329013456",
+    },
+}
+
+
+# TODO pass an instance of AddressBook class to the function instead of mock
+def search_by_symbols(args, book=book):
+    symbols = args[0]
+
+    matches = []
+    book_values = book.data.values()
+
+    def check_is_match(value, symbols):
+        string_lower = str(value).lower()
+        return string_lower.find(symbols.lower()) != -1
+
+    if len(book_values):
+        for record in book_values:
+            if (
+                check_is_match(record.name, symbols)
+                or check_is_match(record.email, symbols)
+                or check_is_match(record.phone, symbols)
+            ):
+                matches.append(str(record))
+
+    if len(matches):
+        matches_string = "\n".join(matches)
+        return f"{'*'*15}\n{matches_string}\n{'*'*15}"
+    else:
+        return "No matches found"
+
+
 def main():
     # get data from json logic
     print("Welcome to the assistant bot!")
@@ -218,5 +260,7 @@ def main():
             on_find_notes()
         elif command == "get-note":
             on_get_note()
+        elif command == "search":
+            search_by_symbols()
         else:
             print("Invalid command.")
