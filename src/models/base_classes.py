@@ -1,17 +1,10 @@
 import re
 from datetime import datetime
-
-
-class PhoneValidationError(Exception):
-    pass
-
-
-class BirthdayValidationError(Exception):
-    pass
-
-
-class EmailValidationError(Exception):
-    pass
+from exceptions import (
+    PhoneValidationError,
+    BirthdayValidationError,
+    EmailValidationError,
+)
 
 
 class Field:
@@ -36,9 +29,7 @@ class Phone(Field):
         )
 
         if not valid_phone_number:
-            raise PhoneValidationError(
-                "Phone number should consists of 10 digits in international format"
-            )
+            raise PhoneValidationError()
 
         super().__init__(phone)
 
@@ -51,7 +42,7 @@ class Birthday(Field):
         )
 
         if not valid_format:
-            raise BirthdayValidationError("Birthday should be in DD.MM.YYYY format")
+            raise BirthdayValidationError()
 
         birthday_date = datetime.strptime(birthday, "%d.%m.%Y").date()
         super().__init__(birthday_date)
@@ -62,7 +53,7 @@ class Email(Field):
         valid_email = re.match(r"^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$", email)
 
         if not valid_email:
-            raise EmailValidationError("Please provide valid email address")
+            raise EmailValidationError()
 
         super().__init__(email)
 

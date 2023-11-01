@@ -1,17 +1,12 @@
-class NameIsRequiredException(Exception):
-    pass
-
-
-class PhoneIsRequiredException(Exception):
-    pass
-
-
-class InvalidDaysCount(Exception):
-    pass
-
-
-class InvalidChangeField(Exception):
-    pass
+from models.exceptions import (
+    InvalidDaysCount,
+    NameIsRequiredException,
+    PhoneIsRequiredException,
+    InvalidChangeField,
+    PhoneValidationError,
+    BirthdayValidationError,
+    EmailValidationError,
+)
 
 
 def input_error(func):
@@ -28,6 +23,12 @@ def input_error(func):
             print("Phone is required")
         except InvalidChangeField:
             print("Field name is invalid")
+        except PhoneValidationError:
+            print("Phone number should consists of 10 digits in an international format")
+        except BirthdayValidationError:
+            print("Birthday should be in DD.MM.YYYY format")
+        except EmailValidationError:
+            print("Please provide valid email address")
         except Exception:
             print("Unknown error occurred")
 
