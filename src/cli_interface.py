@@ -61,7 +61,7 @@ def on_add_contact(contacts: AddressBook):
     email = input("Enter email: ")
     birthday = input("Enter birthday in DD.MM.YYYY format: ")
     need_fill_address = (
-        input("Do you want to fill address details? (Y/N): ").lower() == "y"
+        input("Do you want to fill address details? (y/N): ").lower() == "y"
     )
 
     address_details = {"country": "", "city": "", "street": "", "house": ""}
@@ -78,6 +78,8 @@ def on_add_contact(contacts: AddressBook):
 
 @input_error
 def on_change_contact(contacts: AddressBook):
+    contacts.show_all()
+
     contact_name = input("Enter a name of the contact, you need to change: ")
 
     contacts.get_contact(contact_name)
@@ -122,7 +124,7 @@ def on_delete_contact(contacts: AddressBook):
     name = input("Enter a name of the contact you want to delete: ")
     contacts.get_contact(name)
     is_sure = (
-        input(f'Are you sure to delete the contact "{name}"? (Y/N): ').lower() == "y"
+        input(f'Are you sure to delete the contact "{name}"? (y/N): ').lower() == "y"
     )
     if is_sure:
         contacts.delete_contact(name)
@@ -154,6 +156,7 @@ def on_add_note(notes: NotesBook):
 
 @input_error
 def on_change_note(notes: NotesBook):
+    notes.show_notes()
     note_name = input("Enter name of the note you need to change: ")
     notes.get_note(note_name)
     field = input("Enter a field, that you need to change (name, body, tags): ").lower()
@@ -170,7 +173,7 @@ def on_change_note(notes: NotesBook):
 def on_delete_note(notes: NotesBook):
     name = input("Enter a name of the note you want to delete: ")
     notes.get_note(name)
-    is_sure = input(f'Are you sure to delete the note "{name}"? (Y/N): ').lower() == "y"
+    is_sure = input(f'Are you sure to delete the note "{name}"? (y/N): ').lower() == "y"
     if is_sure:
         notes.delete_note(name)
         print("Note deleted")

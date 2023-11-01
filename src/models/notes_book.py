@@ -1,5 +1,5 @@
-from note import Note
-from exceptions import NoteNotFoundError
+from models.note import Note
+from .exceptions import NoteNotFoundError
 import json
 import os
 
@@ -7,7 +7,9 @@ import os
 class NotesBook:
     notes: list[Note] = []
 
-    filename = os.path.abspath("../temp/notes.json")
+    filename = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "..", "notes.json")
+    )
 
     def __init__(self) -> None:
         self.__read()
@@ -25,7 +27,7 @@ class NotesBook:
         return json.dumps(data)
 
     def __from_json(self, dump):
-        self.data = [Note(**item) for item in json.loads(dump)]
+        self.notes = [Note(**item) for item in json.loads(dump)]
 
     def __read(self):
         try:
@@ -35,7 +37,7 @@ class NotesBook:
             pass
 
     def save(self):
-        with open(self.filename, "w") as file:
+        with open(self.filename, "w+") as file:
             file.write(self.__to_json())
 
     def add_note(self, name: str, body: str | None, tags: list[str]):
