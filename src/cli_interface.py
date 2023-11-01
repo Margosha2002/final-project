@@ -181,7 +181,7 @@ def on_get_note():
     # find and show note logic
 
 
-def main():
+def cli_interface():
     # get data from json logic
     print("Welcome to the assistant bot!")
     while True:
