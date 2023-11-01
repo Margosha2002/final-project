@@ -1,5 +1,5 @@
-from record import Record
-from src.helpers.check_is_match import check_is_match
+from .record import Record
+from helpers.check_is_match import check_is_match
 import json
 import os
 
@@ -11,7 +11,9 @@ class ContactNotFoundError(Exception):
 class AddressBook:
     data: list[Record] = []
 
-    filename = os.path.abspath("../temp/contacts.json")
+    filename = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "..", "contacts.json")
+    )
 
     def __init__(self) -> None:
         self.__read()
@@ -21,15 +23,15 @@ class AddressBook:
         for record in self.data:
             data.append(
                 {
-                    "name": record.name,
-                    "phone": record.phone,
-                    "email": record.email,
-                    "birthday": record.birthday,
+                    "name": record.name.value,
+                    "phone": record.phone.value,
+                    "email": record.email.value if record.email else None,
+                    "birthday": record.birthday.value if record.birthday else None,
                     "address": {
-                        "country": record.address.country,
-                        "city": record.address.city,
-                        "street": record.address.street,
-                        "house": record.address.house,
+                        "country": record.address.country if record.address else None,
+                        "city": record.address.city if record.address else None,
+                        "street": record.address.street if record.address else None,
+                        "house": record.address.house if record.address else None,
                     },
                 }
             )
@@ -46,7 +48,7 @@ class AddressBook:
             pass
 
     def save(self):
-        with open(self.filename, "w") as file:
+        with open(self.filename, "w+") as file:
             file.write(self.__to_json())
 
     def add_contact(self, name, address, phone, birthday, email):

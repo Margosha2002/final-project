@@ -1,6 +1,6 @@
 import re
 from datetime import datetime
-from exceptions import (
+from .exceptions import (
     PhoneValidationError,
     BirthdayValidationError,
     EmailValidationError,
@@ -79,18 +79,16 @@ class Email(Field):
 
 class Address:
     def __init__(
-        country,
         self,
+        country,
         city,
         street,
         house,
     ):
-        self.__country = country
-        self.__city = city
-        self.__street = street
-        self.__house = house
+        self.country = country
+        self.city = city
+        self.street = street
+        self.house = house
 
     def __str__(self):
-        return (
-            f"{ self.__country}, {self.__city}, {self.__street} street, {self.__house}"
-        )
+        return f"{ self.country}, {self.city}, {self.street} street, {self.house}"

@@ -1,4 +1,4 @@
-from base_classes import Name, Phone, Birthday, Email, Address
+from .base_classes import Name, Phone, Birthday, Email, Address
 from datetime import datetime, timedelta
 
 
@@ -22,7 +22,7 @@ class Record:
         email_str = str(self.__email) if self.__email else "---"
         phone_str = str(self.__phone) if self.__phone else "---"
         birthday_str = str(self.__birthday) if self.__birthday else "---"
-        return f"Name: {str(self.__name)<12}, phone: {phone_str:<12}, email: {email_str:<12}, birthday: {birthday_str:<12}".format()
+        return f"Name: {str(self.__name)}, phone: {phone_str}, email: {email_str}, birthday: {birthday_str}"
 
     @property
     def name(self):
@@ -72,6 +72,8 @@ class Record:
         self.address = address
 
     def check_birthday(self, days):
+        if not self.birthday:
+            return False
         today = datetime.now()
         date_to_check = today + timedelta(days=days)
         return (
