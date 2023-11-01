@@ -13,6 +13,7 @@ class InvalidDaysCount(Exception):
 class InvalidChangeField(Exception):
     pass
 
+
 class PhoneValidationError(Exception):
     pass
 
@@ -22,4 +23,16 @@ class BirthdayValidationError(Exception):
 
 
 class EmailValidationError(Exception):
+    pass
+
+
+class BodyValidationError(Exception):
+    pass
+
+
+class TagValidationError(Exception):
+    pass
+
+
+class NoteNotFoundError(Exception):
     pass

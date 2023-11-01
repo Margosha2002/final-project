@@ -4,6 +4,9 @@ from exceptions import (
     PhoneValidationError,
     BirthdayValidationError,
     EmailValidationError,
+    NameIsRequiredException,
+    BodyValidationError,
+    TagValidationError,
 )
 
 
@@ -17,7 +20,23 @@ class Field:
 
 class Name(Field):
     def __init__(self, name):
+        if not name:
+            raise NameIsRequiredException()
         super().__init__(name)
+
+
+class Body(Field):
+    def __init__(self, value):
+        if not value:
+            raise BodyValidationError()
+        super().__init__(value)
+
+
+class Tag(Field):
+    def __init__(self, value):
+        if not value:
+            raise TagValidationError()
+        super().__init__(value)
 
 
 class Phone(Field):

@@ -13,9 +13,9 @@ class Record:
             )
         else:
             self.address = None
-        self.__phone = Phone(phone) or None
-        self.__birthday = Birthday(birthday) or None
-        self.__email = Email(email) or None
+        self.__phone = Phone(phone) if phone else None
+        self.__birthday = Birthday(birthday) if birthday else None
+        self.__email = Email(email) if email else None
 
     def __str__(self):
         email_str = str(self.__email) if self.__email else "---"

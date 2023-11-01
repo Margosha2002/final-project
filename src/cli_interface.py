@@ -24,7 +24,9 @@ def input_error(func):
         except InvalidChangeField:
             print("Field name is invalid")
         except PhoneValidationError:
-            print("Phone number should consists of 10 digits in an international format")
+            print(
+                "Phone number should consists of 10 digits in an international format"
+            )
         except BirthdayValidationError:
             print("Birthday should be in DD.MM.YYYY format")
         except EmailValidationError:
@@ -49,10 +51,10 @@ def on_add_contact():
     print("Fill all contact info, if you want to leave it blank, just press enter")
     name = input("Enter contact name (required): ")
     if not name:
-        raise NameIsRequiredException
+        raise NameIsRequiredException()
     phone = input("Enter phone (required): ")
     if not phone:
-        raise PhoneIsRequiredException
+        raise PhoneIsRequiredException()
     email = input("Enter email: ")
     birthday = input("Enter birthday in DD.MM.YYYY format: ")
     need_fill_address = (
@@ -81,7 +83,7 @@ def on_change_contact():
     ).lower()
 
     if not field in ["name", "phone", "email", "birthday", "address"]:
-        raise InvalidChangeField
+        raise InvalidChangeField()
 
     if field == "address":
         address_details = {"country": "", "city": "", "street": "", "house": ""}
@@ -163,7 +165,7 @@ def on_delete_contact():
 def on_show_birthdays():
     days = input("Enter days count: ")
     if not days.isdigit():
-        raise InvalidDaysCount
+        raise InvalidDaysCount()
     else:
         # show birthdays for next X days
         pass
@@ -173,7 +175,7 @@ def on_show_birthdays():
 def on_add_note():
     name = input("Enter a name of the note (required): ")
     if not name:
-        raise NameIsRequiredException
+        raise NameIsRequiredException()
     body = input("Enter body: ")
     tags = input('Enter tags in "tag1, tag2, tag3" format: ').split(", ")
     # save note logic
@@ -186,7 +188,7 @@ def on_change_note():
     field = input("Enter a field, that you need to change (name, body, tags): ").lower()
 
     if not field in ["name", "body", "tags"]:
-        raise InvalidChangeField
+        raise InvalidChangeField()
 
     # change note logic
 
