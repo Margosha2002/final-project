@@ -26,7 +26,7 @@ class AddressBook:
                     "name": record.name.value,
                     "phone": record.phone.value,
                     "email": record.email.value if record.email else None,
-                    "birthday": record.birthday.value if record.birthday else None,
+                    "birthday": str(record.birthday) if record.birthday else None,
                     "address": {
                         "country": record.address.country if record.address else None,
                         "city": record.address.city if record.address else None,
@@ -54,6 +54,7 @@ class AddressBook:
     def add_contact(self, name, address, phone, birthday, email):
         record = Record(name, address, phone, birthday, email)
         self.data.append(record)
+        return str(record)
 
     def change_contact(self, name, field, value):
         record: Record = self.__get_contact(name)
@@ -74,11 +75,20 @@ class AddressBook:
         elif field == "birthday":
             record.birthday = value
 
+        return str(record)
+
     def show_all(self):
+        res = []
+
         for item in self.data:
             print(str(item))
+            res.append(str(item))
+
+        return res
 
     def find_contacts(self, search):
+        res = []
+
         for record in self.data:
             if (
                 check_is_match(record.name.value, search)
@@ -86,6 +96,9 @@ class AddressBook:
                 or check_is_match(record.phone.value, search)
             ):
                 print(str(record))
+                res.append(str(record))
+
+        return res
 
     def __get_contact(self, name):
         for item in self.data:
@@ -95,12 +108,19 @@ class AddressBook:
         raise ContactNotFoundError()
 
     def get_contact(self, name):
-        print(str(self.__get_contact(name)))
+        res = str(self.__get_contact(name))
+        print(res)
+        return res
 
     def delete_contact(self, name):
         self.data = list(filter(lambda item: item.name != name, self.data))
 
     def show_birthdays(self, days):
+        res = []
+
         for item in self.data:
             if item.check_birthday(days):
                 print(str(item))
+                res.append(str(item))
+
+        return res

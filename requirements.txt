@@ -1,1 +1,4 @@
 py-mon
+fastapi
+uvicorn
+pydantic

@@ -166,7 +166,7 @@ def on_change_note(notes: NotesBook):
 
     value = input("Enter field value: ")
 
-    notes.change_note(note_name, field, value)
+    notes.change_note(note_name, field, value if field != "tags" else value.split(", "))
     print("Note changed")
 
 
@@ -220,9 +220,11 @@ def show_command_list():
     )
 
 
+contacts = AddressBook()
+notes = NotesBook()
+
+
 def cli_interface():
-    contacts = AddressBook()
-    notes = NotesBook()
     print("Welcome to the assistant bot!")
     show_command_list()
 
@@ -264,3 +266,7 @@ def cli_interface():
             on_get_note(notes)
         else:
             print("Invalid command. Type 'help' to get the whole command list")
+
+
+if __name__ == "__main__":
+    cli_interface()
