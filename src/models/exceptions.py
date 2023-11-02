@@ -36,3 +36,7 @@ class TagValidationError(Exception):
 
 class NoteNotFoundError(Exception):
     pass
+
+
+class ContactNotFoundError(Exception):
+    pass
