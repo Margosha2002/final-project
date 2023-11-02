@@ -3,54 +3,30 @@ from models.exceptions import (
     NameIsRequiredException,
     PhoneIsRequiredException,
     InvalidChangeField,
-    PhoneValidationError,
-    BirthdayValidationError,
-    EmailValidationError,
 )
+from models.completer import MyCustomCompleter
 from models.notes_book import NotesBook
 from models.address_book import AddressBook
+from helpers.input_error import input_error
+from helpers.create_prompt import create_prompt
+from colorama import Fore
 
 
-def input_error(func):
-    def inner(*args, **kwargs):
-        try:
-            data = func(*args, **kwargs)
-            if data:
-                print(data)
-        except InvalidDaysCount:
-            print("Invalid days count")
-        except NameIsRequiredException:
-            print("Name is required")
-        except PhoneIsRequiredException:
-            print("Phone is required")
-        except InvalidChangeField:
-            print("Field name is invalid")
-        except PhoneValidationError:
-            print(
-                "Phone number should consists of 10 digits in an international format"
-            )
-        except BirthdayValidationError:
-            print("Birthday should be in DD.MM.YYYY format")
-        except EmailValidationError:
-            print("Please provide valid email address")
-        except Exception:
-            print("Unknown error occurred")
-
-    return inner
-
-
-def on_exit(contacts: AddressBook, notes: NotesBook):
+def on_exit(
+    contacts: AddressBook,
+    notes: NotesBook,
+):
     contacts.save()
     notes.save()
     print("Good bye!")
 
 
-def on_greetings():
+def on_greetings(*args, **kwargs):
     print("How can I help you?")
 
 
 @input_error
-def on_add_contact(contacts: AddressBook):
+def on_add_contact(contacts: AddressBook, *args, **kwargs):
     print("Fill all contact info, if you want to leave it blank, just press enter")
     name = input("Enter contact name (required): ")
     if not name:
@@ -77,7 +53,7 @@ def on_add_contact(contacts: AddressBook):
 
 
 @input_error
-def on_change_contact(contacts: AddressBook):
+def on_change_contact(contacts: AddressBook, *args, **kwargs):
     contacts.show_all()
 
     contact_name = input("Enter a name of the contact, you need to change: ")
@@ -106,21 +82,23 @@ def on_change_contact(contacts: AddressBook):
     print("Contact changed")
 
 
-def on_show_all_contacts(contacts: AddressBook):
+def on_show_all_contacts(contacts: AddressBook, **kwargs):
     contacts.show_all()
 
 
-def on_find_contacts(contacts: AddressBook):
+def on_find_contacts(contacts: AddressBook, *args, **kwargs):
     search_pattern = input("Enter search pattern: ")
     contacts.find_contacts(search_pattern)
 
 
-def on_get_contact(contacts: AddressBook):
+@input_error
+def on_get_contact(contacts: AddressBook, *args, **kwargs):
     name = input("Enter a contact name: ")
     contacts.get_contact(name)
 
 
-def on_delete_contact(contacts: AddressBook):
+@input_error
+def on_delete_contact(contacts: AddressBook, *args, **kwargs):
     name = input("Enter a name of the contact you want to delete: ")
     contacts.get_contact(name)
     is_sure = (
@@ -134,7 +112,7 @@ def on_delete_contact(contacts: AddressBook):
 
 
 @input_error
-def on_show_birthdays(contacts: AddressBook):
+def on_show_birthdays(contacts: AddressBook, *args, **kwargs):
     days = input("Enter days count: ")
     if not days.isdigit():
         raise InvalidDaysCount()
@@ -144,7 +122,7 @@ def on_show_birthdays(contacts: AddressBook):
 
 
 @input_error
-def on_add_note(notes: NotesBook):
+def on_add_note(notes: NotesBook, *args, **kwargs):
     name = input("Enter a name of the note (required): ")
     if not name:
         raise NameIsRequiredException()
@@ -155,7 +133,7 @@ def on_add_note(notes: NotesBook):
 
 
 @input_error
-def on_change_note(notes: NotesBook):
+def on_change_note(notes: NotesBook, *args, **kwargs):
     notes.show_notes()
     note_name = input("Enter name of the note you need to change: ")
     notes.get_note(note_name)
@@ -170,7 +148,8 @@ def on_change_note(notes: NotesBook):
     print("Note changed")
 
 
-def on_delete_note(notes: NotesBook):
+@input_error
+def on_delete_note(notes: NotesBook, *args, **kwargs):
     name = input("Enter a name of the note you want to delete: ")
     notes.get_note(name)
     is_sure = input(f'Are you sure to delete the note "{name}"? (y/N): ').lower() == "y"
@@ -181,21 +160,22 @@ def on_delete_note(notes: NotesBook):
         print("Deletion cancelled!")
 
 
-def on_show_notes(notes: NotesBook):
+def on_show_notes(notes: NotesBook, *args, **kwargs):
     notes.show_notes()
 
 
-def on_find_notes(notes: NotesBook):
+def on_find_notes(notes: NotesBook, *args, **kwargs):
     search_pattern = input("Enter search pattern: ").lower()
     notes.find_notes(search_pattern)
 
 
-def on_get_note(notes: NotesBook):
+@input_error
+def on_get_note(notes: NotesBook, *args, **kwargs):
     name = input("Enter a note name: ")
     notes.get_note(name)
 
 
-def show_command_list():
+def show_command_list(*args, **kwargs):
     print(
         """
     *************************************************************************
@@ -220,47 +200,49 @@ def show_command_list():
     )
 
 
+COMMANDS = {
+    "close": on_exit,
+    "exit": on_exit,
+    "hello": on_greetings,
+    "help": show_command_list,
+    "add-contact": on_add_contact,
+    "change-contact": on_change_contact,
+    "show-contacts": on_show_all_contacts,
+    "find-contacts": on_find_contacts,
+    "get-contact": on_get_contact,
+    "delete-contact": on_delete_contact,
+    "show-birthdays": on_show_birthdays,
+    "add-note": on_add_note,
+    "change-note": on_change_note,
+    "delete-note": on_delete_note,
+    "show-notes": on_show_notes,
+    "find-notes": on_find_notes,
+    "get-note": on_get_note,
+}
+
+
 def cli_interface():
     contacts = AddressBook()
     notes = NotesBook()
     print("Welcome to the assistant bot!")
     show_command_list()
 
-    while True:
-        command = input("Enter a command: ").lower()
+    command_list = COMMANDS.keys()
 
-        if command in ["close", "exit"]:
-            on_exit(contacts, notes)
-            break
-        elif command == "hello":
-            on_greetings()
-        elif command == "help":
-            show_command_list()
-        elif command == "add-contact":
-            on_add_contact(contacts)
-        elif command == "change-contact":
-            on_change_contact(contacts)
-        elif command == "show-contacts":
-            on_show_all_contacts(contacts)
-        elif command == "find-contacts":
-            on_find_contacts(contacts)
-        elif command == "get-contact":
-            on_get_contact(contacts)
-        elif command == "delete-contact":
-            on_delete_contact(contacts)
-        elif command == "show-birthdays":
-            on_show_birthdays(contacts)
-        elif command == "add-note":
-            on_add_note(notes)
-        elif command == "change-note":
-            on_change_note(notes)
-        elif command == "delete-note":
-            on_delete_note(notes)
-        elif command == "show-notes":
-            on_show_notes(notes)
-        elif command == "find-notes":
-            on_find_notes(notes)
-        elif command == "get-note":
-            on_get_note(notes)
+    while True:
+        command = create_prompt(command_list).lower().strip()
+
+        if command in COMMANDS:
+            COMMANDS[command](contacts=contacts, notes=notes)
+
+            if command in ["close", "exit"]:
+                break
         else:
-            print("Invalid command. Type 'help' to get the whole command list")
+            print(
+                Fore.YELLOW
+                + "Invalid command. Type"
+                + Fore.LIGHTGREEN_EX
+                + ' "help" '
+                + Fore.YELLOW
+                + "to get the whole command list"
+            )
