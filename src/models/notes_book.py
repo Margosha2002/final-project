@@ -1,4 +1,4 @@
-from models.note import Note
+from .note import Note
 from .exceptions import NoteNotFoundError
 import json
 import os

@@ -4,8 +4,8 @@ from fastapi.responses import JSONResponse
 import uvicorn
 from pydantic import BaseModel
 from enum import Enum
-from models.address_book import AddressBook
-from models.notes_book import NotesBook
+from .models.address_book import AddressBook
+from .models.notes_book import NotesBook
 
 app = FastAPI()
 
