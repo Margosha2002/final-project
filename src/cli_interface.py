@@ -52,25 +52,25 @@ def on_greetings():
 @input_error
 def on_add_contact(contacts: AddressBook):
     print("Fill all contact info, if you want to leave it blank, just press enter")
-    name = input("Enter contact name (required): ").strip()
+    name = input("Enter contact name (required): ")
     if not name:
         raise NameIsRequiredException()
-    phone = input("Enter phone (required): ").strip()
+    phone = input("Enter phone (required): ")
     if not phone:
         raise PhoneIsRequiredException()
-    email = input("Enter email: ").strip()
-    birthday = input("Enter birthday in DD.MM.YYYY format: ").strip()
+    email = input("Enter email: ")
+    birthday = input("Enter birthday in DD.MM.YYYY format: ")
     need_fill_address = (
-        input("Do you want to fill address details? (y/N): ").strip().lower() == "y"
+        input("Do you want to fill address details? (y/N): ").lower() == "y"
     )
 
     address_details = {"country": "", "city": "", "street": "", "house": ""}
 
     if need_fill_address:
-        address_details["country"] = input("Enter country: ").strip()
-        address_details["city"] = input("Enter city: ").strip()
-        address_details["street"] = input("Enter street: ").strip()
-        address_details["house"] = input("Enter house: ").strip()
+        address_details["country"] = input("Enter country: ")
+        address_details["city"] = input("Enter city: ")
+        address_details["street"] = input("Enter street: ")
+        address_details["house"] = input("Enter house: ")
 
     contacts.add_contact(name, address_details, phone, birthday, email)
     print("Contact added")
@@ -80,31 +80,27 @@ def on_add_contact(contacts: AddressBook):
 def on_change_contact(contacts: AddressBook):
     contacts.show_all()
 
-    contact_name = input("Enter a name of the contact, you need to change: ").strip()
+    contact_name = input("Enter a name of the contact, you need to change: ")
 
     contacts.get_contact(contact_name)
 
-    field = (
-        input(
-            "Enter a field, that you need to change (name, phone, email, birthday, address): "
-        )
-        .strip()
-        .lower()
-    )
+    field = input(
+        "Enter a field, that you need to change (name, phone, email, birthday, address): "
+    ).lower()
 
     if not field in ["name", "phone", "email", "birthday", "address"]:
         raise InvalidChangeField()
 
     if field == "address":
         address_details = {"country": "", "city": "", "street": "", "house": ""}
-        address_details["country"] = input("Enter country: ").strip()
-        address_details["city"] = input("Enter city: ").strip()
-        address_details["street"] = input("Enter street: ").strip()
-        address_details["house"] = input("Enter house: ").strip()
+        address_details["country"] = input("Enter country: ")
+        address_details["city"] = input("Enter city: ")
+        address_details["street"] = input("Enter street: ")
+        address_details["house"] = input("Enter house: ")
 
         contacts.change_contact(contact_name, field, address_details)
     else:
-        value = input("Enter field value: ").strip()
+        value = input("Enter field value: ")
         contacts.change_contact(contact_name, field, value)
 
     print("Contact changed")
@@ -115,21 +111,20 @@ def on_show_all_contacts(contacts: AddressBook):
 
 
 def on_find_contacts(contacts: AddressBook):
-    search_pattern = input("Enter search pattern: ").strip()
+    search_pattern = input("Enter search pattern: ")
     contacts.find_contacts(search_pattern)
 
 
 def on_get_contact(contacts: AddressBook):
-    name = input("Enter a contact name: ").strip()
+    name = input("Enter a contact name: ")
     contacts.get_contact(name)
 
 
 def on_delete_contact(contacts: AddressBook):
-    name = input("Enter a name of the contact you want to delete: ").strip()
+    name = input("Enter a name of the contact you want to delete: ")
     contacts.get_contact(name)
     is_sure = (
-        input(f'Are you sure to delete the contact "{name}"? (y/N): ').strip().lower()
-        == "y"
+        input(f'Are you sure to delete the contact "{name}"? (y/N): ').lower() == "y"
     )
     if is_sure:
         contacts.delete_contact(name)
@@ -140,7 +135,7 @@ def on_delete_contact(contacts: AddressBook):
 
 @input_error
 def on_show_birthdays(contacts: AddressBook):
-    days = input("Enter days count: ").strip()
+    days = input("Enter days count: ")
     if not days.isdigit():
         raise InvalidDaysCount()
     else:
@@ -150,11 +145,11 @@ def on_show_birthdays(contacts: AddressBook):
 
 @input_error
 def on_add_note(notes: NotesBook):
-    name = input("Enter a name of the note (required): ").strip()
+    name = input("Enter a name of the note (required): ")
     if not name:
         raise NameIsRequiredException()
-    body = input("Enter body: ").strip()
-    tags = input('Enter tags in "tag1, tag2, tag3" format: ').strip().split(", ")
+    body = input("Enter body: ")
+    tags = input('Enter tags in "tag1, tag2, tag3" format: ').split(", ")
     notes.add_note(name, body, tags)
     print("Note added")
 
@@ -162,30 +157,23 @@ def on_add_note(notes: NotesBook):
 @input_error
 def on_change_note(notes: NotesBook):
     notes.show_notes()
-    note_name = input("Enter name of the note you need to change: ").strip()
+    note_name = input("Enter name of the note you need to change: ")
     notes.get_note(note_name)
-    field = (
-        input("Enter a field, that you need to change (name, body, tags): ")
-        .strip()
-        .lower()
-    )
+    field = input("Enter a field, that you need to change (name, body, tags): ").lower()
 
     if not field in ["name", "body", "tags"]:
         raise InvalidChangeField()
 
-    value = input("Enter field value: ").strip()
+    value = input("Enter field value: ")
 
     notes.change_note(note_name, field, value)
     print("Note changed")
 
 
 def on_delete_note(notes: NotesBook):
-    name = input("Enter a name of the note you want to delete: ").strip()
+    name = input("Enter a name of the note you want to delete: ")
     notes.get_note(name)
-    is_sure = (
-        input(f'Are you sure to delete the note "{name}"? (y/N): ').strip().lower()
-        == "y"
-    )
+    is_sure = input(f'Are you sure to delete the note "{name}"? (y/N): ').lower() == "y"
     if is_sure:
         notes.delete_note(name)
         print("Note deleted")
@@ -198,12 +186,12 @@ def on_show_notes(notes: NotesBook):
 
 
 def on_find_notes(notes: NotesBook):
-    search_pattern = input("Enter search pattern: ").strip().lower()
+    search_pattern = input("Enter search pattern: ").lower()
     notes.find_notes(search_pattern)
 
 
 def on_get_note(notes: NotesBook):
-    name = input("Enter a note name: ").strip()
+    name = input("Enter a note name: ")
     notes.get_note(name)
 
 
@@ -239,7 +227,7 @@ def cli_interface():
     show_command_list()
 
     while True:
-        command = input("Enter a command: ").strip().lower()
+        command = input("Enter a command: ").lower()
 
         if command in ["close", "exit"]:
             on_exit(contacts, notes)
