@@ -1,12 +1,8 @@
 from .record import Record
 from helpers.check_is_match import check_is_match
+from models.exceptions import ContactNotFoundError
 import json
 import os
-
-
-class ContactNotFoundError(Exception):
-    pass
-
 
 class AddressBook:
     data: list[Record] = []

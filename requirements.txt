@@ -1,4 +1,6 @@
 py-mon
+prompt_toolkit
+colorama
 fastapi
 uvicorn
 pydantic
