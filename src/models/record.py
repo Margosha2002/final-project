@@ -77,6 +77,6 @@ class Record:
         today = datetime.now()
         date_to_check = today + timedelta(days=days)
         return (
-            self.birthday.value.date() > today.date()
+            self.birthday.value > today.date()
             and self.birthday.value.date() < date_to_check.date()
         )

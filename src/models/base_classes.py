@@ -66,6 +66,9 @@ class Birthday(Field):
         birthday_date = datetime.strptime(birthday, "%d.%m.%Y").date()
         super().__init__(birthday_date)
 
+    def __str__(self):
+        return self.value.strftime("%d.%m.%Y")
+
 
 class Email(Field):
     def __init__(self, email):

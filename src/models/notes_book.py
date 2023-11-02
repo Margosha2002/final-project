@@ -41,7 +41,9 @@ class NotesBook:
             file.write(self.__to_json())
 
     def add_note(self, name: str, body: str | None, tags: list[str]):
-        self.notes.append(Note(name, body, tags))
+        note = Note(name, body, tags)
+        self.notes.append(note)
+        return str(note)
 
     def change_note(self, name: str, field: str, value: str | list[str]):
         note = self.__get_note(name)
@@ -53,20 +55,34 @@ class NotesBook:
         elif field == "tags":
             note.tags = value
 
+        return str(note)
+
     def delete_note(self, name):
         self.notes = list(filter(lambda item: item.name != name, self.notes))
 
     def show_notes(self):
+        res = []
+
         for item in self.notes:
             print(str(item))
+            res.append(str(item))
+
+        return res
 
     def find_notes(self, key):
+        res = []
+
         for item in self.notes:
             if item.check_key(key):
                 print(str(item))
+                res.append(str(item))
+
+        return res
 
     def get_note(self, name):
-        print(str(self.__get_note(name)))
+        res = str(self.__get_note(name))
+        print(res)
+        return res
 
     def __get_note(self, name: str) -> Note:
         for item in self.notes:
