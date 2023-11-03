@@ -4,6 +4,7 @@ from models.exceptions import ContactNotFoundError
 import json
 import os
 
+
 class AddressBook:
     data: list[Record] = []
 
