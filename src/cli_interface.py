@@ -1,14 +1,12 @@
 from models.exceptions import (
     InvalidDaysCount,
-    NameIsRequiredException,
-    PhoneIsRequiredException,
     InvalidChangeField,
 )
-from models.completer import MyCustomCompleter
 from models.notes_book import NotesBook
 from models.address_book import AddressBook
 from helpers.input_error import input_error
 from helpers.create_prompt import create_prompt
+from helpers.required_input import required_input
 from colorama import Fore
 
 
@@ -28,12 +26,8 @@ def on_greetings(*args, **kwargs):
 @input_error
 def on_add_contact(contacts: AddressBook, *args, **kwargs):
     print("Fill all contact info, if you want to leave it blank, just press enter")
-    name = input("Enter contact name (required): ").strip()
-    if not name:
-        raise NameIsRequiredException()
-    phone = input("Enter phone (required): ").strip()
-    if not phone:
-        raise PhoneIsRequiredException()
+    name = required_input("Enter contact name (required): ", "Name is required")
+    phone = required_input("Enter phone (required): ", "Phone is required")
     email = input("Enter email: ").strip()
     birthday = input("Enter birthday in DD.MM.YYYY format: ").strip()
     need_fill_address = (
@@ -128,9 +122,7 @@ def on_show_birthdays(contacts: AddressBook, *args, **kwargs):
 
 @input_error
 def on_add_note(notes: NotesBook, *args, **kwargs):
-    name = input("Enter a name of the note (required): ").strip()
-    if not name:
-        raise NameIsRequiredException()
+    name = required_input("Enter a name of the note (required): ", "Name is required")
     body = input("Enter body: ").strip()
     tags = input('Enter tags in "tag1, tag2, tag3" format: ').strip().split(", ")
     notes.add_note(name, body, tags)

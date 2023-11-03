@@ -150,5 +150,10 @@ app.include_router(router=helloRouter, prefix="/hello", tags=["hello"])
 app.include_router(router=contactsRouter, prefix="/contacts", tags=["contacts"])
 app.include_router(router=notesRouter, prefix="/notes", tags=["notes"])
 
-if __name__ == "__main__":
+
+def main():
     uvicorn.run(app=app, port=3030)
+
+
+if __name__ == "__main__":
+    main()

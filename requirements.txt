@@ -1,6 +1,5 @@
-py-mon
-prompt_toolkit
-colorama
-fastapi
-uvicorn
-pydantic
+prompt_toolkit==3.0.36
+colorama==0.4.6
+fastapi==0.104.1
+uvicorn==0.23.2
+pydantic==2.4.2
